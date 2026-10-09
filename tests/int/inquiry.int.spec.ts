@@ -117,7 +117,7 @@ describe('submitInquiry', () => {
   })
 
   it('quietly drops honeypot submissions', async () => {
-    const state = await submitInquiry(initialInquiryState, form({ ...valid, company: 'Bot Inc' }))
+    const state = await submitInquiry(initialInquiryState, form({ ...valid, referralCode: 'Bot Inc' }))
 
     expect(state.status).toBe('success')
     expect(fetchMock).not.toHaveBeenCalled()

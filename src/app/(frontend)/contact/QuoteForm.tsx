@@ -110,10 +110,11 @@ export function QuoteForm() {
         {fieldError('message')}
       </div>
 
-      {/* Honeypot: hidden from people, tempting to bots. */}
+      {/* Honeypot: hidden from people, tempting to bots. The name must not be one browsers autofill
+          (company, address, phone…): they ignore autoComplete="off" and fill hidden fields too. */}
       <div aria-hidden="true" className={ui.visuallyHidden}>
-        <label htmlFor="company">Company</label>
-        <input autoComplete="off" id="company" name="company" tabIndex={-1} type="text" />
+        <label htmlFor="referralCode">Referral code</label>
+        <input autoComplete="off" id="referralCode" name="referralCode" tabIndex={-1} type="text" />
       </div>
 
       <button className={cx(ui.button, styles.submit)} disabled={pending} type="submit">

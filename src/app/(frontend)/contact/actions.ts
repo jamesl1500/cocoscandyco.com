@@ -21,7 +21,10 @@ export async function submitInquiry(
   formData: FormData,
 ): Promise<InquiryState> {
   // Honeypot: real visitors never see or fill this field. Pretend it worked so bots don't retry.
-  if (formData.get('company')) return success
+  if (formData.get('referralCode')) {
+    console.warn('[contact] Dropped a submission that filled the honeypot field')
+    return success
+  }
 
   const values: InquiryState['values'] = {}
   for (const field of inquiryFields) {
