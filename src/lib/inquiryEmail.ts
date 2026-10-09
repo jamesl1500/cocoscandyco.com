@@ -64,8 +64,8 @@ export async function sendInquiryEmail(inquiry: Inquiry) {
   const apiKey = process.env.RESEND_API_KEY
   if (!apiKey) throw new Error('RESEND_API_KEY is not set')
 
-  // Resend only delivers from a domain verified in the account; its shared test sender is the fallback.
-  const from = process.env.EMAIL_FROM_ADDRESS || 'onboarding@resend.dev'
+  // Resend only delivers from a domain verified in the account, which cocoscandyco.com is.
+  const from = process.env.EMAIL_FROM_ADDRESS || 'quotes@cocoscandyco.com'
   const to = process.env.INQUIRY_NOTIFY_EMAIL || siteInfo.email
 
   const response = await fetch('https://api.resend.com/emails', {
