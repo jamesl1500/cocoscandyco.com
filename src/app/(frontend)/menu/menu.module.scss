@@ -1,0 +1,40 @@
+@use '../../../styles/mixins' as m;
+
+@include m.keyframes-rise;
+
+.menuSections {
+  display: grid;
+  gap: 48px;
+}
+
+.menuList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 0 40px;
+
+  > li {
+    @include m.reveal;
+
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  p {
+    margin: 4px 0 0;
+    color: var(--muted);
+  }
+}
+
+.menuItemHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+
+  h3 {
+    margin: 0;
+    font-family: var(--font-body), system-ui, sans-serif;
+    font-size: 1.0625rem;
+    font-weight: 700;
+  }
+}

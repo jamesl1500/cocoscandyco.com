@@ -1,0 +1,185 @@
+@use '../../styles/mixins' as m;
+
+@include m.keyframes-rise;
+@include m.keyframes-pop-in;
+@include m.keyframes-drift;
+
+@keyframes bob {
+  to {
+    translate: 0 -10px;
+  }
+}
+
+// Hero
+
+.hero {
+  @include m.backdrop;
+
+  padding-block: clamp(48px, 8vw, 104px);
+
+  // A second blob, bottom left.
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -140px;
+    left: -100px;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    background: rgb(240 130 170 / 0.35);
+    filter: blur(60px);
+    pointer-events: none;
+
+    @include m.motion {
+      animation: drift 18s ease-in-out infinite alternate-reverse;
+    }
+  }
+}
+
+.heroInner {
+  display: grid;
+  gap: 40px;
+  align-items: center;
+
+  @include m.from(m.$desktop) {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: 64px;
+  }
+
+  h1 {
+    max-width: 20ch;
+    font-size: clamp(2.125rem, 4.6vw, 3.25rem);
+  }
+}
+
+.heroCopy {
+  @include m.entrance;
+}
+
+.heroPoints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-top: 24px;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  font-weight: 600;
+
+  li::before {
+    content: '\2713';
+    margin-right: 8px;
+    color: var(--berry);
+    font-weight: 700;
+  }
+}
+
+.heroMedia {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  margin-inline: auto;
+  // Room for the accent photo that hangs below the main one.
+  margin-bottom: 28px;
+}
+
+.heroPhoto {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 28px;
+  box-shadow: var(--shadow-lg);
+  rotate: 1.5deg;
+
+  @include m.from(m.$desktop) {
+    aspect-ratio: 1;
+  }
+
+  @include m.motion {
+    animation: pop-in 0.9s var(--ease) 0.1s both;
+  }
+}
+
+.heroPhotoAccent {
+  position: absolute;
+  bottom: -28px;
+  left: 4%;
+  width: 34%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border: 5px solid #fff;
+  border-radius: 20px;
+  box-shadow: var(--shadow-md);
+  rotate: -5deg;
+
+  @include m.from(m.$desktop) {
+    left: -10%;
+  }
+
+  @include m.motion {
+    animation:
+      pop-in 0.8s var(--ease) 0.35s both,
+      bob 5s ease-in-out 1.2s infinite alternate;
+  }
+}
+
+// How it works
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 28px;
+  counter-reset: step;
+
+  li {
+    @include m.reveal;
+    @include m.reveal-stagger;
+
+    padding: 28px 24px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+    counter-increment: step;
+
+    &::before {
+      content: counter(step);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      margin-bottom: 16px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--berry) 0%, var(--berry-dark) 100%);
+      color: #fff;
+      font-family: var(--font-display), Georgia, serif;
+      font-size: 1.125rem;
+      font-weight: 700;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+    }
+  }
+}
+
+// Testimonials
+
+.testimonial {
+  margin: 0;
+
+  blockquote {
+    margin: 0;
+  }
+
+  figcaption {
+    color: var(--ink);
+    font-weight: 700;
+
+    span {
+      color: var(--muted);
+      font-weight: 400;
+    }
+  }
+}

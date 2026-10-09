@@ -4,7 +4,11 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React, { useState } from 'react'
 
+import { cx } from '@/lib/cx'
 import { navLinks } from '@/lib/site'
+import ui from '@/styles/ui.module.scss'
+
+import styles from './Header.module.scss'
 
 export function Header({ name }: { name: string }) {
   const pathname = usePathname()
@@ -12,22 +16,23 @@ export function Header({ name }: { name: string }) {
   const close = () => setOpen(false)
 
   return (
-    <header className="site-header">
-      <div className="container header-inner">
-        <Link className="brand" href="/" onClick={close}>
+    // The transition name keeps the header still while page content animates between routes.
+    <header className={styles.siteHeader} style={{ viewTransitionName: 'site-header' }}>
+      <div className={cx(ui.container, styles.headerInner)}>
+        <Link className={styles.brand} href="/" onClick={close}>
           {name}
         </Link>
         <button
           aria-controls="site-nav"
           aria-expanded={open}
           aria-label={open ? 'Close navigation' : 'Open navigation'}
-          className="nav-toggle"
+          className={styles.navToggle}
           onClick={() => setOpen(!open)}
           type="button"
         >
-          <span aria-hidden="true" className="nav-toggle-bars" />
+          <span aria-hidden="true" className={styles.navToggleBars} />
         </button>
-        <nav aria-label="Main" className="site-nav" data-open={open} id="site-nav">
+        <nav aria-label="Main" className={styles.siteNav} data-open={open} id="site-nav">
           <ul>
             {navLinks.map((link) => (
               <li key={link.href}>
@@ -41,7 +46,7 @@ export function Header({ name }: { name: string }) {
               </li>
             ))}
           </ul>
-          <Link className="button" href="/contact" onClick={close}>
+          <Link className={ui.button} href="/contact" onClick={close}>
             Get a quote
           </Link>
         </nav>

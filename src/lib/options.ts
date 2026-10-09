@@ -1,4 +1,4 @@
-// Option lists shared by the Payload schema and the public site.
+// Option lists shared by the quote form, the menu and the notification email.
 
 export const eventTypes = [
   { label: 'Wedding', value: 'wedding' },

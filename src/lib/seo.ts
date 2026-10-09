@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 
-import type { FaqContent, ServiceContent } from './defaults'
-import { absoluteUrl, type SiteInfo } from './site'
+import { serviceAreas, serviceCounties, type ServiceArea } from './areas'
+import type { FaqContent, ServiceContent } from './data'
+import { photos } from './photos'
+import { absoluteUrl, HOME_BASE, phoneHref, type SiteInfo } from './site'
 
 const BUSINESS_ID = absoluteUrl('/#business')
 
@@ -14,7 +16,10 @@ type PageSeo = {
 }
 
 // Per-page metadata. Open Graph is rebuilt in full because Next.js replaces, rather than merges, nested metadata objects.
-export function pageMetadata(site: SiteInfo, { title, description, path, absoluteTitle }: PageSeo): Metadata {
+export function pageMetadata(
+  site: SiteInfo,
+  { title, description, path, absoluteTitle }: PageSeo,
+): Metadata {
   const fullTitle = absoluteTitle ? title : `${title} | ${site.name}`
 
   return {
@@ -37,6 +42,24 @@ export function pageMetadata(site: SiteInfo, { title, description, path, absolut
   }
 }
 
+const cityJsonLd = (area: ServiceArea) => ({
+  '@type': 'City',
+  name: `${area.name}, ${HOME_BASE.region}`,
+  containedInPlace: {
+    '@type': 'AdministrativeArea',
+    name: `${area.county}, ${HOME_BASE.regionName}`,
+  },
+})
+
+// Every city and county we travel to, so search engines can match the business to "near me" and city searches.
+const areaServedJsonLd = () => [
+  ...serviceAreas.map(cityJsonLd),
+  ...serviceCounties.map((county) => ({
+    '@type': 'AdministrativeArea',
+    name: `${county}, ${HOME_BASE.regionName}`,
+  })),
+]
+
 export function businessJsonLd(site: SiteInfo, services: ServiceContent[]) {
   const { address } = site
 
@@ -47,16 +70,18 @@ export function businessJsonLd(site: SiteInfo, services: ServiceContent[]) {
     name: site.name,
     description: site.description,
     url: absoluteUrl('/'),
-    telephone: site.phone,
+    image: absoluteUrl(photos.table.url),
+    telephone: site.phone && phoneHref(site.phone).replace('tel:', ''),
     email: site.email,
-    areaServed: site.serviceArea,
-    address: address && {
+    areaServed: areaServedJsonLd(),
+    // Home city only: add a street address in site.ts if the business gets a storefront.
+    address: {
       '@type': 'PostalAddress',
-      streetAddress: address.street,
-      addressLocality: address.city,
-      addressRegion: address.region,
-      postalCode: address.postalCode,
-      addressCountry: address.country,
+      streetAddress: address?.street,
+      addressLocality: address?.city || HOME_BASE.city,
+      addressRegion: address?.region || HOME_BASE.region,
+      postalCode: address?.postalCode,
+      addressCountry: address?.country || HOME_BASE.country,
     },
     sameAs: site.social.length > 0 ? site.social : undefined,
     hasOfferCatalog: {
@@ -75,7 +100,7 @@ export function businessJsonLd(site: SiteInfo, services: ServiceContent[]) {
   }
 }
 
-export function serviceJsonLd(site: SiteInfo, service: ServiceContent) {
+export function serviceJsonLd(service: ServiceContent) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
@@ -84,7 +109,20 @@ export function serviceJsonLd(site: SiteInfo, service: ServiceContent) {
     serviceType: 'Catering',
     url: absoluteUrl(`/services/${service.slug}`),
     image: service.image ? absoluteUrl(service.image.url) : undefined,
-    areaServed: site.serviceArea,
+    areaServed: areaServedJsonLd(),
+    provider: { '@id': BUSINESS_ID },
+  }
+}
+
+export function areaJsonLd(area: ServiceArea) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: `Candy and dessert catering in ${area.name}, ${HOME_BASE.region}`,
+    description: area.summary,
+    serviceType: 'Catering',
+    url: absoluteUrl(`/service-areas/${area.slug}`),
+    areaServed: cityJsonLd(area),
     provider: { '@id': BUSINESS_ID },
   }
 }

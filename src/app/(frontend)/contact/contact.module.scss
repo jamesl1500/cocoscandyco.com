@@ -1,0 +1,108 @@
+@use '../../../styles/mixins' as m;
+
+@include m.keyframes-rise;
+
+.quoteForm {
+  @include m.reveal;
+
+  display: grid;
+  gap: 20px;
+}
+
+.fieldRow {
+  display: grid;
+  gap: 20px;
+
+  @include m.from(m.$tablet) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.field {
+  label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  // 16px+ text stops iOS Safari zooming in when a field takes focus.
+  input,
+  select,
+  textarea {
+    width: 100%;
+    min-height: 48px;
+    padding: 10px 14px;
+    border: 1px solid #b9a59b;
+    border-radius: 10px;
+    background: var(--surface);
+    color: var(--ink);
+    font: inherit;
+    font-size: 1rem;
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+
+    &:focus {
+      border-color: var(--berry);
+      box-shadow: 0 0 0 4px rgb(194 37 92 / 0.14);
+    }
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  [aria-invalid='true'] {
+    border-color: var(--error);
+  }
+}
+
+.fieldError {
+  margin: 6px 0 0;
+  color: var(--error);
+  font-size: 0.9375rem;
+}
+
+.submit {
+  @include m.from(m.$tablet) {
+    justify-self: start;
+  }
+}
+
+.formNotice {
+  margin: 0;
+  padding: 16px 20px;
+  border-radius: var(--radius);
+}
+
+.formNoticeError {
+  background: #fde8e6;
+  color: var(--error);
+  font-weight: 600;
+}
+
+.formNoticeSuccess {
+  background: var(--success-bg);
+
+  p {
+    margin: 0;
+  }
+}
+
+.contactList {
+  li {
+    padding: 12px 0;
+    border-top: 1px solid var(--line);
+    // Long email addresses wrap instead of widening the page on small phones.
+    overflow-wrap: anywhere;
+  }
+
+  span {
+    display: block;
+    color: var(--muted);
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+}

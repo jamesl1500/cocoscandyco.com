@@ -1,5 +1,8 @@
 import Link from 'next/link'
 import React from 'react'
+import { cx } from '@/lib/cx'
+import sections from '@/components/sections.module.scss'
+import ui from '@/styles/ui.module.scss'
 
 export const metadata = {
   title: 'Page not found',
@@ -8,16 +11,16 @@ export const metadata = {
 
 export default function NotFound() {
   return (
-    <section className="page-header">
-      <div className="container">
-        <p className="eyebrow">404</p>
+    <section className={sections.pageHeader}>
+      <div className={ui.container}>
+        <p className={ui.eyebrow}>404</p>
         <h1>We couldn’t find that page</h1>
-        <p className="lead">It may have moved, or the link may be out of date.</p>
-        <div className="button-row">
-          <Link className="button" href="/">
+        <p className={ui.lead}>It may have moved, or the link may be out of date.</p>
+        <div className={ui.buttonRow}>
+          <Link className={ui.button} href="/">
             Back to home
           </Link>
-          <Link className="button button-outline" href="/services">
+          <Link className={cx(ui.button, ui.buttonOutline)} href="/services">
             Browse services
           </Link>
         </div>

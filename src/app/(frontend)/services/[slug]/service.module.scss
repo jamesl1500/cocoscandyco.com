@@ -1,0 +1,8 @@
+.serviceImage {
+  width: 100%;
+  max-height: 460px;
+  margin-bottom: 24px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+}

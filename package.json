@@ -1,35 +1,25 @@
 {
   "name": "cocoscandyco",
   "version": "1.0.0",
-  "description": "A blank template to get started with Payload 3.0",
+  "description": "Coco's Couture Candy Co. website",
   "license": "MIT",
   "type": "module",
   "scripts": {
     "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
     "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
-    "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
-    "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
     "lint": "cross-env NODE_OPTIONS=--no-deprecation eslint .",
-    "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "test": "pnpm run test:int && pnpm run test:e2e",
     "test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts",
     "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts"
   },
   "dependencies": {
-    "@payloadcms/next": "3.90.2",
-    "@payloadcms/richtext-lexical": "3.90.2",
-    "@payloadcms/ui": "3.90.2",
     "cross-env": "^7.0.3",
     "dotenv": "16.4.7",
-    "graphql": "^16.8.1",
     "next": "16.4.0",
-    "payload": "3.90.2",
     "react": "19.2.6",
-    "react-dom": "19.2.6",
-    "sharp": "0.35.4",
-    "@payloadcms/db-sqlite": "3.90.2"
+    "react-dom": "19.2.6"
   },
   "devDependencies": {
     "@playwright/test": "1.58.2",
@@ -42,6 +32,7 @@
     "eslint-config-next": "16.4.0",
     "jsdom": "28.0.0",
     "prettier": "^3.4.2",
+    "sass": "^1.105.1",
     "tsx": "4.23.15",
     "typescript": "5.7.3",
     "vite-tsconfig-paths": "6.0.5",

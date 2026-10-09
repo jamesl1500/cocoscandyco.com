@@ -1,0 +1,269 @@
+@use '../styles/mixins' as m;
+
+@include m.keyframes-rise;
+@include m.keyframes-drift;
+
+@keyframes marquee {
+  to {
+    translate: -50% 0;
+  }
+}
+
+// Page header
+
+.pageHeader {
+  @include m.backdrop;
+
+  padding-block: clamp(32px, 6vw, 72px);
+
+  > div {
+    @include m.entrance;
+  }
+
+  h1 {
+    max-width: 20ch;
+  }
+}
+
+.breadcrumbs {
+  margin-bottom: 20px;
+  font-size: 0.9375rem;
+
+  ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 8px;
+  }
+
+  li + li::before {
+    content: '/';
+    margin-right: 8px;
+    color: var(--muted);
+  }
+
+  [aria-current] {
+    color: var(--muted);
+  }
+}
+
+// Section heading
+
+.sectionHeading {
+  @include m.reveal;
+
+  max-width: 640px;
+  margin-bottom: 32px;
+
+  p:not(:first-child) {
+    color: var(--muted);
+  }
+}
+
+// Photo gallery
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: clamp(150px, 42vw, 280px);
+  gap: 12px;
+
+  > li {
+    @include m.reveal;
+    @include m.reveal-stagger;
+
+    &:nth-child(1),
+    &:nth-child(4) {
+      grid-column: span 2;
+    }
+  }
+
+  figure {
+    position: relative;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+
+    &:hover img {
+      scale: 1.05;
+    }
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: scale 0.8s var(--ease);
+
+    @include m.reduced-motion {
+      transition: none;
+    }
+  }
+
+  figcaption {
+    position: absolute;
+    inset: auto 0 0;
+    padding: 40px 16px 12px;
+    background: linear-gradient(to top, rgb(51 32 28 / 0.78), rgb(51 32 28 / 0));
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  @include m.from(m.$desktop) {
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: clamp(260px, 26vw, 340px);
+    gap: 20px;
+
+    > li:nth-child(1) {
+      grid-column: span 4;
+    }
+
+    > li:nth-child(2) {
+      grid-column: span 2;
+    }
+
+    > li:nth-child(3),
+    > li:nth-child(4) {
+      grid-column: span 3;
+    }
+  }
+}
+
+// Scrolling ribbon under the hero
+
+.marquee {
+  overflow: hidden;
+  padding-block: 14px;
+  background: var(--berry-dark);
+  color: #fff;
+}
+
+.marqueeTrack {
+  display: flex;
+  width: max-content;
+
+  @include m.motion {
+    animation: marquee 40s linear infinite;
+  }
+
+  li {
+    font-family: var(--font-display), Georgia, serif;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    white-space: nowrap;
+
+    &::after {
+      content: '\2726';
+      margin-inline: 22px;
+      color: var(--butter);
+      font-size: 0.75rem;
+      vertical-align: middle;
+    }
+  }
+}
+
+// FAQ
+
+.faqList {
+  details {
+    @include m.reveal;
+
+    border-bottom: 1px solid var(--line);
+
+    p {
+      color: var(--muted);
+    }
+
+    // Answers slide open instead of snapping.
+    @include m.motion {
+      @supports (interpolate-size: allow-keywords) {
+        interpolate-size: allow-keywords;
+
+        &::details-content {
+          block-size: 0;
+          overflow: clip;
+          transition:
+            block-size 0.35s var(--ease),
+            content-visibility 0.35s allow-discrete;
+        }
+
+        &[open]::details-content {
+          block-size: auto;
+        }
+      }
+    }
+  }
+
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 56px;
+    padding: 12px 0;
+    font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &::after {
+      content: '+';
+      flex-shrink: 0;
+      color: var(--berry);
+      font-size: 1.5rem;
+      line-height: 1;
+      transition: rotate 0.3s var(--ease);
+    }
+
+    &:hover {
+      color: var(--berry-dark);
+    }
+  }
+
+  // The plus turns into a close mark.
+  details[open] summary::after {
+    rotate: 45deg;
+  }
+}
+
+// Call to action
+
+.ctaBand {
+  padding-block: var(--section-space);
+  // Scattered confetti dots over the berry gradient.
+  background:
+    radial-gradient(circle at 12% 24%, rgb(255 238 194 / 0.5) 0 5px, transparent 6px),
+    radial-gradient(circle at 86% 30%, rgb(255 227 236 / 0.45) 0 7px, transparent 8px),
+    radial-gradient(circle at 22% 80%, rgb(255 227 236 / 0.35) 0 6px, transparent 7px),
+    radial-gradient(circle at 74% 78%, rgb(255 238 194 / 0.4) 0 4px, transparent 5px),
+    radial-gradient(circle at 50% 10%, rgb(255 255 255 / 0.25) 0 3px, transparent 4px),
+    linear-gradient(135deg, var(--berry-dark) 0%, var(--berry) 100%);
+  color: #fff;
+  text-align: center;
+
+  > div {
+    @include m.reveal;
+  }
+
+  p {
+    max-width: 52ch;
+    margin-inline: auto;
+    margin-bottom: 28px;
+  }
+
+  .ctaPhone {
+    margin: 20px auto 0;
+    font-size: 0.9375rem;
+
+    a {
+      color: #fff;
+      font-weight: 700;
+    }
+  }
+}

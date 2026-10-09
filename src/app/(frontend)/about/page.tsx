@@ -2,9 +2,14 @@ import type { Metadata } from 'next'
 import React from 'react'
 
 import { JsonLd } from '@/components/JsonLd'
+import { PageTransition } from '@/components/PageTransition'
 import { Breadcrumbs, CtaBand, PageHeader } from '@/components/sections'
 import { getSiteInfo } from '@/lib/content'
 import { breadcrumbJsonLd, pageMetadata } from '@/lib/seo'
+import { HOME_BASE } from '@/lib/site'
+import { cx } from '@/lib/cx'
+import sections from '@/components/sections.module.scss'
+import ui from '@/styles/ui.module.scss'
 
 const crumbs = [
   { name: 'Home', path: '/' },
@@ -31,7 +36,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return pageMetadata(site, {
     title: 'About Us',
-    description: `Meet ${site.name}: candy and dessert catering built around your event, with sweets chosen for flavor and styled to your theme.`,
+    description: `Meet ${site.name}, a ${HOME_BASE.label} candy and dessert caterer. Sweets chosen for flavor and styled to your theme, across the Triangle.`,
     path: '/about',
   })
 }
@@ -40,7 +45,7 @@ export default async function AboutPage() {
   const site = await getSiteInfo()
 
   return (
-    <>
+    <PageTransition>
       <PageHeader
         eyebrow="About"
         intro="We believe the sweets table should be the part of the party people talk about afterwards."
@@ -49,12 +54,13 @@ export default async function AboutPage() {
         <Breadcrumbs crumbs={crumbs} />
       </PageHeader>
 
-      <section className="section">
-        <div className="container container-narrow prose">
+      <section className={ui.section}>
+        <div className={cx(ui.container, ui.containerNarrow, ui.prose)}>
           {/* TODO: replace with the real story — who runs the business, when it started and why. */}
           <p>
-            {site.name} is a catering company devoted to the sweet side of events. We design candy
-            buffets and dessert tables for weddings, company events and family celebrations
+            {site.name} is a {HOME_BASE.city}, {HOME_BASE.regionName} catering company devoted to
+            the sweet side of events. We design candy buffets and dessert tables for weddings,
+            company events and family celebrations
             {site.serviceArea ? ` throughout ${site.serviceArea}` : ''}.
           </p>
           <p>
@@ -65,14 +71,14 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <section className="section section-tint">
-        <div className="container">
-          <div className="section-heading">
+      <section className={cx(ui.section, ui.sectionTint)}>
+        <div className={ui.container}>
+          <div className={sections.sectionHeading}>
             <h2>What you can expect</h2>
           </div>
-          <ul className="card-grid">
+          <ul className={ui.cardGrid}>
             {values.map((value) => (
-              <li className="card" key={value.title}>
+              <li className={ui.card} key={value.title}>
                 <h3>{value.title}</h3>
                 <p>{value.text}</p>
               </li>
@@ -83,6 +89,6 @@ export default async function AboutPage() {
 
       <CtaBand />
       <JsonLd data={breadcrumbJsonLd(crumbs)} />
-    </>
+    </PageTransition>
   )
 }

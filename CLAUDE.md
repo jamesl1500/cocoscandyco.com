@@ -1,7 +1,8 @@
 # Claude Code
 
-This project uses the Payload CMS skill at `.claude/skills/payload/`.
-Start with `.claude/skills/payload/SKILL.md` for a quick reference, then see `.claude/skills/payload/reference/` for detailed docs.
+A statically rendered Next.js site with no CMS or database. Content lives in `src/lib/data.ts`, `src/lib/site.ts` and `src/lib/areas.ts`.
+Styling is SCSS modules: shared primitives in `src/styles/ui.module.scss`, design tokens and resets in `src/styles/globals.scss`, mixins in `src/styles/_mixins.scss`.
+The quote form (`src/app/(frontend)/contact/`) emails requests through Resend.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

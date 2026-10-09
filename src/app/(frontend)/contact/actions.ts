@@ -1,9 +1,8 @@
 'use server'
 
-import config from '@payload-config'
-import { getPayload } from 'payload'
-
-import { eventTypes, type EventType } from '@/lib/options'
+import { sendInquiryEmail } from '@/lib/inquiryEmail'
+import { eventTypes } from '@/lib/options'
+import { siteInfo } from '@/lib/site'
 
 import { inquiryFields, type InquiryState } from './state'
 
@@ -17,7 +16,10 @@ const success: InquiryState = {
   values: {},
 }
 
-export async function submitInquiry(_prev: InquiryState, formData: FormData): Promise<InquiryState> {
+export async function submitInquiry(
+  _prev: InquiryState,
+  formData: FormData,
+): Promise<InquiryState> {
   // Honeypot: real visitors never see or fill this field. Pretend it worked so bots don't retry.
   if (formData.get('company')) return success
 
@@ -37,19 +39,15 @@ export async function submitInquiry(_prev: InquiryState, formData: FormData): Pr
 
   if (values.phone && values.phone.length > 30) errors.phone = 'Phone number is too long.'
 
-  const eventType = eventTypes.find((type) => type.value === values.eventType)?.value as
-    | EventType
-    | undefined
-  if (values.eventType && !eventType) errors.eventType = 'Please choose an event type from the list.'
+  const eventType = eventTypes.find((type) => type.value === values.eventType)?.value
+  if (values.eventType && !eventType)
+    errors.eventType = 'Please choose an event type from the list.'
 
-  let eventDate: string | undefined
-  if (values.eventDate) {
-    // Noon UTC keeps the calendar day stable across time zones.
-    const parsed = new Date(`${values.eventDate}T12:00:00Z`)
-    if (!DATE_PATTERN.test(values.eventDate) || Number.isNaN(parsed.getTime()))
-      errors.eventDate = 'Please enter a valid date.'
-    else eventDate = parsed.toISOString()
-  }
+  if (
+    values.eventDate &&
+    (!DATE_PATTERN.test(values.eventDate) || Number.isNaN(Date.parse(values.eventDate)))
+  )
+    errors.eventDate = 'Please enter a valid date.'
 
   let guestCount: number | undefined
   if (values.guestCount) {
@@ -73,26 +71,22 @@ export async function submitInquiry(_prev: InquiryState, formData: FormData): Pr
   }
 
   try {
-    const payload = await getPayload({ config })
-    await payload.create({
-      collection: 'inquiries',
-      data: {
-        status: 'new',
-        name: values.name!,
-        email: values.email!,
-        phone: values.phone || undefined,
-        eventType,
-        eventDate,
-        guestCount,
-        location: values.location || undefined,
-        message: values.message!,
-      },
+    await sendInquiryEmail({
+      name: values.name!,
+      email: values.email!,
+      phone: values.phone || undefined,
+      eventType,
+      eventDate: values.eventDate || undefined,
+      guestCount,
+      location: values.location || undefined,
+      message: values.message!,
     })
   } catch (error) {
-    console.error('[contact] Failed to save inquiry', error)
+    // Nothing is stored anywhere else, so the visitor has to know the request did not go through.
+    console.error('[contact] Failed to send inquiry', error)
     return {
       status: 'error',
-      message: 'Something went wrong on our end and your request was not sent. Please try again.',
+      message: `Something went wrong on our end and your request was not sent. Please try again, or call us at ${siteInfo.phone}.`,
       errors: {},
       values,
     }

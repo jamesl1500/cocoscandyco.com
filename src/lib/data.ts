@@ -1,4 +1,5 @@
 import type { MenuCategory } from './options'
+import { photos } from './photos'
 
 export type ServiceContent = {
   slug: string
@@ -31,10 +32,9 @@ export type FaqContent = {
   answer: string
 }
 
-// Starter content shown while a collection is still empty in the admin panel.
-// Adding the first document to a collection replaces that collection's starter content.
+// The site's content. Edit it here and redeploy.
 
-export const defaultServices: ServiceContent[] = [
+export const services: ServiceContent[] = [
   {
     slug: 'candy-buffets',
     title: 'Candy Buffets',
@@ -47,6 +47,7 @@ export const defaultServices: ServiceContent[] = [
       'Jars, scoops, signage and take-home bags',
       'Delivery, styling, setup and teardown',
     ],
+    image: photos.lollipops,
   },
   {
     slug: 'dessert-tables',
@@ -60,6 +61,7 @@ export const defaultServices: ServiceContent[] = [
       'Stands, platters and table styling',
       'Works with or instead of a cake',
     ],
+    image: photos.table,
   },
   {
     slug: 'wedding-sweets-and-favors',
@@ -73,6 +75,7 @@ export const defaultServices: ServiceContent[] = [
       'Reception candy bars and dessert displays',
       'Coordination with your planner and venue',
     ],
+    image: photos.treats,
   },
   {
     slug: 'corporate-events-and-gifting',
@@ -86,10 +89,11 @@ export const defaultServices: ServiceContent[] = [
       'Stations for launches, conferences and office parties',
       'Boxed gifts for clients and teams',
     ],
+    image: photos.pretzels,
   },
 ]
 
-export const defaultMenuItems: MenuItemContent[] = [
+export const menuItems: MenuItemContent[] = [
   {
     name: 'Gummy Assortment',
     category: 'candy',
@@ -158,7 +162,12 @@ export const defaultMenuItems: MenuItemContent[] = [
   },
 ]
 
-export const defaultFaqs: FaqContent[] = [
+export const faqs: FaqContent[] = [
+  {
+    question: 'What areas do you serve?',
+    answer:
+      'We are based in Chapel Hill, North Carolina and cater events across the Triangle, including Carrboro, Durham, Hillsborough, Pittsboro, Cary, Raleigh and Mebane, throughout Orange, Durham, Chatham, Wake and Alamance counties. Planning something farther out? Ask and we will let you know if we can travel.',
+  },
   {
     question: 'How far in advance should I book?',
     answer:
@@ -185,3 +194,6 @@ export const defaultFaqs: FaqContent[] = [
       'Yes. We plan the candy, packaging and table styling around your colors, theme or company branding.',
   },
 ]
+
+// The home page only shows the testimonials section once there is at least one here.
+export const testimonials: TestimonialContent[] = []

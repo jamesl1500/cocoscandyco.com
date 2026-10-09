@@ -1,0 +1,125 @@
+// Mobile-first: base rules target small screens, these add layout for larger ones.
+$tablet: 600px;
+$desktop: 860px;
+
+@mixin from($breakpoint) {
+  @media (min-width: $breakpoint) {
+    @content;
+  }
+}
+
+// All motion is decoration. With reduced motion, or without browser support, the page is simply static:
+// nothing is hidden waiting for JavaScript.
+@mixin motion {
+  @media (prefers-reduced-motion: no-preference) {
+    @content;
+  }
+}
+
+@mixin reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}
+
+// Keyframes are scoped per module, so a module that animates includes the ones it uses.
+@mixin keyframes-rise {
+  @keyframes rise {
+    from {
+      opacity: 0;
+      translate: 0 24px;
+    }
+  }
+}
+
+@mixin keyframes-pop-in {
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      scale: 0.94;
+    }
+  }
+}
+
+@mixin keyframes-drift {
+  @keyframes drift {
+    to {
+      translate: 40px 30px;
+      scale: 1.15;
+    }
+  }
+}
+
+// Scroll reveal, driven by scroll position rather than JavaScript. The range is measured against "cover"
+// so tall and short elements both finish within the first fifth of their trip up the screen.
+// Needs keyframes-rise in the same module.
+@mixin reveal($range: cover 0% cover 20%) {
+  @include motion {
+    @supports (animation-timeline: view()) {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: $range;
+    }
+  }
+}
+
+// Items in a row arrive slightly one after another. Apply to the list items that already reveal.
+@mixin reveal-stagger {
+  @include motion {
+    @supports (animation-timeline: view()) {
+      &:nth-child(2n) {
+        animation-range: cover 3% cover 24%;
+      }
+
+      &:nth-child(3n) {
+        animation-range: cover 6% cover 28%;
+      }
+    }
+  }
+}
+
+// Entrance: direct children rise in one after another on page load.
+// Needs keyframes-rise in the same module.
+@mixin entrance {
+  @include motion {
+    > * {
+      animation: rise 0.7s var(--ease) both;
+    }
+
+    @for $index from 2 through 5 {
+      > :nth-child(#{$index}) {
+        animation-delay: #{($index - 1) * 0.08}s;
+      }
+    }
+  }
+}
+
+// Gradient band with a soft, slowly drifting color blob, shared by the hero and page headers.
+// Needs keyframes-drift in the same module.
+@mixin backdrop {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--blush) 0%, var(--cream) 55%, var(--butter) 100%);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -120px;
+    right: -80px;
+    width: 360px;
+    height: 360px;
+    border-radius: 50%;
+    background: rgb(255 214 120 / 0.55);
+    filter: blur(60px);
+    pointer-events: none;
+
+    @include motion {
+      animation: drift 14s ease-in-out infinite alternate;
+    }
+  }
+
+  > div {
+    position: relative;
+    z-index: 1;
+  }
+}

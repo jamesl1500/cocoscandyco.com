@@ -5,9 +5,17 @@ import { notFound } from 'next/navigation'
 import React from 'react'
 
 import { JsonLd } from '@/components/JsonLd'
-import { Breadcrumbs, CtaBand, PageHeader } from '@/components/sections'
+import { PageTransition } from '@/components/PageTransition'
+import { AreaLinks, Breadcrumbs, CtaBand, PageHeader, SectionHeading } from '@/components/sections'
+import { serviceAreas } from '@/lib/areas'
 import { getService, getServices, getSiteInfo } from '@/lib/content'
 import { breadcrumbJsonLd, pageMetadata, serviceJsonLd } from '@/lib/seo'
+import { HOME_BASE } from '@/lib/site'
+import { cx } from '@/lib/cx'
+import sections from '@/components/sections.module.scss'
+import ui from '@/styles/ui.module.scss'
+
+import styles from './service.module.scss'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -24,19 +32,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!service) return {}
 
   return pageMetadata(site, {
-    title: service.seoTitle || `${service.title} Catering`,
-    description: service.seoDescription || service.summary,
+    title: service.seoTitle || `${service.title} in ${HOME_BASE.label}`,
+    description:
+      service.seoDescription ||
+      `${service.summary} Serving ${HOME_BASE.city}, Durham and the Triangle, ${HOME_BASE.region}.`,
     path: `/services/${service.slug}`,
   })
 }
 
 export default async function ServicePage({ params }: Props) {
   const { slug } = await params
-  const [site, service, services] = await Promise.all([
-    getSiteInfo(),
-    getService(slug),
-    getServices(),
-  ])
+  const [service, services] = await Promise.all([getService(slug), getServices()])
   if (!service) notFound()
 
   const crumbs = [
@@ -47,21 +53,21 @@ export default async function ServicePage({ params }: Props) {
   const others = services.filter((other) => other.slug !== service.slug)
 
   return (
-    <>
+    <PageTransition>
       <PageHeader eyebrow="Catering service" intro={service.summary} title={service.title}>
         <Breadcrumbs crumbs={crumbs} />
       </PageHeader>
 
-      <section className="section">
-        <div className="container split">
-          <div className="prose">
+      <section className={ui.section}>
+        <div className={cx(ui.container, ui.split)}>
+          <div className={ui.prose}>
             {service.image && (
               <Image
                 alt={service.image.alt}
-                className="service-image"
+                className={styles.serviceImage}
                 height={service.image.height}
                 priority
-                sizes="(min-width: 900px) 640px, 100vw"
+                sizes="(min-width: 860px) 640px, 100vw"
                 src={service.image.url}
                 width={service.image.width}
               />
@@ -71,17 +77,17 @@ export default async function ServicePage({ params }: Props) {
             ))}
           </div>
 
-          <aside className="card">
+          <aside className={ui.card}>
             <h2>What’s included</h2>
             {service.highlights.length > 0 && (
-              <ul className="check-list">
+              <ul className={ui.checkList}>
                 {service.highlights.map((highlight) => (
                   <li key={highlight}>{highlight}</li>
                 ))}
               </ul>
             )}
-            {service.priceFrom && <p className="price">From {service.priceFrom}</p>}
-            <Link className="button" href="/contact">
+            {service.priceFrom && <p className={ui.price}>From {service.priceFrom}</p>}
+            <Link className={ui.button} href="/contact">
               Request a quote
             </Link>
           </aside>
@@ -89,12 +95,12 @@ export default async function ServicePage({ params }: Props) {
       </section>
 
       {others.length > 0 && (
-        <section className="section section-tint">
-          <div className="container">
-            <div className="section-heading">
+        <section className={cx(ui.section, ui.sectionTint)}>
+          <div className={ui.container}>
+            <div className={sections.sectionHeading}>
               <h2>Other services</h2>
             </div>
-            <ul className="link-list">
+            <ul className={ui.linkList}>
               {others.map((other) => (
                 <li key={other.slug}>
                   <Link href={`/services/${other.slug}`}>{other.title}</Link>
@@ -105,9 +111,19 @@ export default async function ServicePage({ params }: Props) {
         </section>
       )}
 
+      <section className={ui.section}>
+        <div className={ui.container}>
+          <SectionHeading
+            text={`We deliver and set up ${service.title.toLowerCase()} across ${HOME_BASE.city} and the Triangle.`}
+            title={`${service.title} near you`}
+          />
+          <AreaLinks areas={serviceAreas} />
+        </div>
+      </section>
+
       <CtaBand title={`Interested in ${service.title.toLowerCase()}?`} />
-      <JsonLd data={serviceJsonLd(site, service)} />
+      <JsonLd data={serviceJsonLd(service)} />
       <JsonLd data={breadcrumbJsonLd(crumbs)} />
-    </>
+    </PageTransition>
   )
 }

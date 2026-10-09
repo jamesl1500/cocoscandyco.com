@@ -7,15 +7,15 @@ import { Header } from '@/components/Header'
 import { JsonLd } from '@/components/JsonLd'
 import { getServices, getSiteInfo } from '@/lib/content'
 import { businessJsonLd } from '@/lib/seo'
-import { SITE_URL } from '@/lib/site'
-import './styles.css'
+import { HOME_BASE, SITE_URL } from '@/lib/site'
+import '@/styles/globals.scss'
 
 const bodyFont = DM_Sans({ subsets: ['latin'], variable: '--font-body', display: 'swap' })
 const displayFont = Fraunces({ subsets: ['latin'], variable: '--font-display', display: 'swap' })
 
 export async function generateMetadata(): Promise<Metadata> {
   const site = await getSiteInfo()
-  const title = `${site.name} | ${site.tagline}`
+  const title = `${site.tagline} in ${HOME_BASE.label} | ${site.name}`
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -42,6 +42,10 @@ export async function generateMetadata(): Promise<Metadata> {
       index: true,
       follow: true,
       googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 },
+    },
+    other: {
+      'geo.region': `${HOME_BASE.country}-${HOME_BASE.region}`,
+      'geo.placename': HOME_BASE.city,
     },
   }
 }

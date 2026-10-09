@@ -8,9 +8,19 @@ export const absoluteUrl = (path = '/') => `${SITE_URL}${path === '/' ? '' : pat
 export const navLinks = [
   { href: '/services', label: 'Services' },
   { href: '/menu', label: 'Menu' },
+  { href: '/service-areas', label: 'Service Areas' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
 ] as const
+
+// Where the business is based. Drives local titles, copy and structured data.
+export const HOME_BASE = {
+  city: 'Chapel Hill',
+  region: 'NC',
+  regionName: 'North Carolina',
+  country: 'US',
+  label: 'Chapel Hill, NC',
+} as const
 
 export type SiteInfo = {
   name: string
@@ -30,13 +40,27 @@ export type SiteInfo = {
   social: string[]
 }
 
-// Used until the Site Settings global is filled in from the admin panel.
-// Contact details are deliberately blank: they stay hidden (and out of structured data) until real ones are entered.
-export const defaultSite: SiteInfo = {
-  name: "Coco's Candy Co.",
+export const socialLabel = (url: string) => {
+  if (url.includes('instagram')) return 'Instagram'
+  if (url.includes('facebook')) return 'Facebook'
+  if (url.includes('tiktok')) return 'TikTok'
+  return 'Social'
+}
+
+// Digits-only link target for a displayed phone number, with the US country code added to ten-digit numbers.
+export const phoneHref = (phone: string) => {
+  const digits = phone.replace(/[^+\d]/g, '')
+  return `tel:${digits.length === 10 ? `+1${digits}` : digits}`
+}
+
+export const siteInfo: SiteInfo = {
+  name: "Coco's Couture Candy Co.",
   tagline: 'Candy & Dessert Catering',
   description:
-    'Candy buffets, dessert tables and custom sweets for weddings, corporate events and celebrations. Request a free catering quote.',
+    'Candy buffets, dessert tables and custom sweets for weddings and events in Chapel Hill, Durham and across the Triangle, NC. Request a free catering quote.',
+  serviceArea: 'Chapel Hill, Durham and the Triangle',
+  phone: '(352) 973-7753',
+  email: 'cocoscouturecandyco@gmail.com',
   hours: [],
-  social: [],
+  social: ['https://www.instagram.com/cocoscouturecandyco/'],
 }
