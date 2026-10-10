@@ -78,6 +78,7 @@ export function ServiceGrid({
           <Heading>
             <Link href={`/services/${service.slug}`}>{service.title}</Link>
           </Heading>
+          {service.tagline && <p className={ui.cardKicker}>{service.tagline}</p>}
           <p>{service.summary}</p>
           {service.priceFrom && <p className={ui.price}>From {service.priceFrom}</p>}
           <span aria-hidden="true" className={ui.cardMore}>

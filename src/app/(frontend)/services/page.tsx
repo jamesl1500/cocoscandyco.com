@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return pageMetadata(site, {
     title: `Candy & Dessert Catering Services in ${HOME_BASE.label}`,
-    description: `Candy buffets, dessert tables, wedding favors and corporate sweets in ${HOME_BASE.city} and the Triangle from ${site.name}. Compare services and request a quote.`,
+    description: `Charcuterie boards, grazing tables, candy buffets, dessert tables and wedding favors in ${HOME_BASE.city} and the Triangle from ${site.name}. Compare services and request a quote.`,
     path: '/services',
   })
 }

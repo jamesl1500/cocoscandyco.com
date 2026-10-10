@@ -4,6 +4,7 @@ import { photos } from './photos'
 export type ServiceContent = {
   slug: string
   title: string
+  tagline?: string
   summary: string
   description: string
   priceFrom?: string
@@ -35,6 +36,48 @@ export type FaqContent = {
 // The site's content. Edit it here and redeploy.
 
 export const services: ServiceContent[] = [
+  {
+    slug: 'charcuterie-boards',
+    title: 'Charcuterie Boards',
+    tagline: 'Beautiful Bites, Made for Sharing.',
+    summary:
+      'Custom-curated boards of cheeses, cured meats, crackers, fruit and complementary bites, arranged for gatherings of all kinds.',
+    description:
+      'Custom-curated charcuterie boards featuring a selection of cheeses, cured meats, crackers, fresh and dried fruits, and other complementary bites. Each board is thoughtfully arranged to create a beautiful presentation for gatherings of all kinds.\n\nWe customize every board to the size of your gathering, your preferences and your budget.',
+    highlights: [
+      'A selection of cheeses and cured meats',
+      'Crackers, fresh and dried fruits and complementary bites',
+      'Sized to your gathering, preferences and budget',
+    ],
+  },
+  {
+    slug: 'grazing-tables',
+    title: 'Grazing Tables',
+    tagline: 'A Feast for the Eyes and the Taste Buds.',
+    summary:
+      'Styled grazing tables of cheeses, meats, fruits, crackers and accompaniments for parties, celebrations and special events.',
+    description:
+      'Beautifully styled grazing tables featuring a variety of cheeses, meats, fruits, crackers, and other delicious accompaniments. These displays are perfect for small parties, intimate gatherings, celebrations, and special events.\n\nWe customize every table to the size of your gathering, your preferences and your budget.',
+    highlights: [
+      'A variety of cheeses, meats, fruits and crackers',
+      'Custom styling and themed color palettes',
+      'Sized to your gathering, preferences and budget',
+    ],
+  },
+  {
+    slug: 'wine-and-charcuterie-pairing-experiences',
+    title: 'Wine & Charcuterie Pairing Experiences',
+    tagline: 'Sip, Savor, and Enjoy.',
+    summary:
+      'A curated charcuterie experience designed to complement a selection of wines, for a fun and elevated way to host.',
+    description:
+      'A curated charcuterie experience designed to complement a selection of wines. Guests can enjoy thoughtfully paired cheeses, meats, fruits, crackers, and other bites for a fun and elevated hosting experience.',
+    highlights: [
+      'Cheeses, meats and bites paired to a selection of wines',
+      'Fruits, crackers and other accompaniments',
+      'Planned around your gathering and preferences',
+    ],
+  },
   {
     slug: 'candy-buffets',
     title: 'Candy Buffets',
@@ -94,6 +137,43 @@ export const services: ServiceContent[] = [
 ]
 
 export const menuItems: MenuItemContent[] = [
+  {
+    name: 'Cheese & Cured Meat Selections',
+    category: 'charcuterie',
+    description: 'The heart of every board and table, with additional selections available.',
+    dietary: [],
+  },
+  {
+    name: 'Fresh & Dried Fruit Assortments',
+    category: 'charcuterie',
+    dietary: [],
+  },
+  {
+    name: 'Assorted Crackers & Specialty Accompaniments',
+    category: 'charcuterie',
+    dietary: [],
+  },
+  {
+    name: 'Wine-Pairing Selections',
+    category: 'charcuterie',
+    description: 'Cheeses, meats and bites chosen to complement a selection of wines.',
+    dietary: [],
+  },
+  {
+    name: 'Chocolate-Covered Rice Crispy Treats',
+    category: 'chocolate',
+    dietary: [],
+  },
+  {
+    name: 'Chocolate-Covered Pretzel Rods',
+    category: 'chocolate',
+    dietary: [],
+  },
+  {
+    name: 'Dessert Bites & Sweet Treats',
+    category: 'baked',
+    dietary: [],
+  },
   {
     name: 'Gummy Assortment',
     category: 'candy',
@@ -155,9 +235,10 @@ export const menuItems: MenuItemContent[] = [
     dietary: [],
   },
   {
-    name: 'Custom Colors & Branding',
+    name: 'Custom Styling & Themed Color Palettes',
     category: 'seasonal',
-    description: 'Sweets and packaging made to match your event colors or company brand.',
+    description:
+      'Boards, tables, sweets and packaging styled to match your event colors, theme or company brand.',
     dietary: [],
   },
 ]
@@ -176,7 +257,7 @@ export const faqs: FaqContent[] = [
   {
     question: 'How does pricing work?',
     answer:
-      'Every quote is tailored to your guest count, the sweets you choose and the level of styling and service. Tell us about your event and we will send an itemized quote.',
+      'Every quote is tailored to the size of your gathering, your preferences and your budget, along with the items you choose and the level of styling and service. Tell us about your event and we will send an itemized quote.',
   },
   {
     question: 'Can you accommodate allergies and dietary needs?',

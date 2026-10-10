@@ -6,6 +6,7 @@ const pages = [
   '/',
   '/services',
   '/services/candy-buffets',
+  '/services/charcuterie-boards',
   '/menu',
   '/service-areas',
   '/service-areas/chapel-hill-nc',

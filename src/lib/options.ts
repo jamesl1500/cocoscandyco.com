@@ -12,6 +12,7 @@ export const eventTypes = [
 export type EventType = (typeof eventTypes)[number]['value']
 
 export const menuCategories = [
+  { label: 'Charcuterie & Grazing', value: 'charcuterie' },
   { label: 'Candy Bar Classics', value: 'candy' },
   { label: 'Chocolates & Truffles', value: 'chocolate' },
   { label: 'Baked Sweets', value: 'baked' },

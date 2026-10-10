@@ -54,7 +54,11 @@ export default async function ServicePage({ params }: Props) {
 
   return (
     <PageTransition>
-      <PageHeader eyebrow="Catering service" intro={service.summary} title={service.title}>
+      <PageHeader
+        eyebrow={service.tagline || 'Catering service'}
+        intro={service.summary}
+        title={service.title}
+      >
         <Breadcrumbs crumbs={crumbs} />
       </PageHeader>
 

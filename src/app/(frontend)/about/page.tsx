@@ -64,9 +64,15 @@ export default async function AboutPage() {
             {site.serviceArea ? ` throughout ${site.serviceArea}` : ''}.
           </p>
           <p>
+            We specialize in creating beautiful charcuterie boards and grazing table experiences
+            that make gatherings feel extra special. Our goal is to provide delicious, visually
+            appealing displays that bring people together and make hosting easier.
+          </p>
+          <p>
             Each event starts with a conversation about what you are celebrating and how you want it
-            to feel. From there we choose the sweets, plan the display and take care of delivery and
-            setup.
+            to feel. From there we customize the boards, tables and sweets to the size of your
+            gathering, your preferences and your budget, then plan the display and take care of
+            delivery and setup.
           </p>
         </div>
       </section>
