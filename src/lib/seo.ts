@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
-import { serviceAreas, serviceCounties, type ServiceArea } from './areas'
+import { areaPlace, regions, serviceAreas, serviceCounties, type ServiceArea } from './areas'
 import type { FaqContent, ServiceContent } from './data'
 import { photos } from './photos'
 import { absoluteUrl, HOME_BASE, phoneHref, type SiteInfo } from './site'
@@ -44,10 +44,10 @@ export function pageMetadata(
 
 const cityJsonLd = (area: ServiceArea) => ({
   '@type': 'City',
-  name: `${area.name}, ${HOME_BASE.region}`,
+  name: areaPlace(area),
   containedInPlace: {
     '@type': 'AdministrativeArea',
-    name: `${area.county}, ${HOME_BASE.regionName}`,
+    name: `${area.county}, ${regions[area.region].name}`,
   },
 })
 
@@ -56,7 +56,7 @@ const areaServedJsonLd = () => [
   ...serviceAreas.map(cityJsonLd),
   ...serviceCounties.map((county) => ({
     '@type': 'AdministrativeArea',
-    name: `${county}, ${HOME_BASE.regionName}`,
+    name: `${county.name}, ${regions[county.region].name}`,
   })),
 ]
 
@@ -118,7 +118,7 @@ export function areaJsonLd(area: ServiceArea) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    name: `Candy and dessert catering in ${area.name}, ${HOME_BASE.region}`,
+    name: `Candy and dessert catering in ${areaPlace(area)}`,
     description: area.summary,
     serviceType: 'Catering',
     url: absoluteUrl(`/service-areas/${area.slug}`),

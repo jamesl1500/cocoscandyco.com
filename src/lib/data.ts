@@ -247,7 +247,7 @@ export const faqs: FaqContent[] = [
   {
     question: 'What areas do you serve?',
     answer:
-      'We are based in Chapel Hill, North Carolina and cater events across the Triangle, including Carrboro, Durham, Hillsborough, Pittsboro, Cary, Raleigh and Mebane, throughout Orange, Durham, Chatham, Wake and Alamance counties. Planning something farther out? Ask and we will let you know if we can travel.',
+      'We are based in Chapel Hill, North Carolina and cater events across the Triangle, including Carrboro, Durham, Hillsborough, Pittsboro, Cary, Raleigh and Mebane, throughout Orange, Durham, Chatham, Wake and Alamance counties. We also take bookings in Ohio, in Cleveland, Westlake and Columbus. Planning something somewhere else? Ask and we will let you know if we can travel.',
   },
   {
     question: 'How far in advance should I book?',

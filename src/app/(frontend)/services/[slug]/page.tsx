@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: service.seoTitle || `${service.title} in ${HOME_BASE.label}`,
     description:
       service.seoDescription ||
-      `${service.summary} Serving ${HOME_BASE.city}, Durham and the Triangle, ${HOME_BASE.region}.`,
+      `${service.summary} Serving ${HOME_BASE.city} and the Triangle, ${HOME_BASE.region}, and Ohio.`,
     path: `/services/${service.slug}`,
   })
 }
@@ -118,10 +118,10 @@ export default async function ServicePage({ params }: Props) {
       <section className={ui.section}>
         <div className={ui.container}>
           <SectionHeading
-            text={`We deliver and set up ${service.title.toLowerCase()} across ${HOME_BASE.city} and the Triangle.`}
+            text={`We deliver and set up ${service.title.toLowerCase()} across ${HOME_BASE.city} and the Triangle, and in Cleveland, Westlake and Columbus, Ohio.`}
             title={`${service.title} near you`}
           />
-          <AreaLinks areas={serviceAreas} />
+          <AreaLinks areas={serviceAreas} showRegion />
         </div>
       </section>
 

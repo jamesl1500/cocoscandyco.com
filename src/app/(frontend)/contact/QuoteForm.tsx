@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useActionState } from 'react'
+import React, { useActionState, useEffect, useRef } from 'react'
 
 import { eventTypes } from '@/lib/options'
 
@@ -13,6 +13,15 @@ import styles from './contact.module.scss'
 
 export function QuoteForm() {
   const [state, formAction, pending] = useActionState(submitInquiry, initialInquiryState)
+  const locationRef = useRef<HTMLInputElement>(null)
+
+  // Service area pages link here with ?location=Durham%2C%20NC. Read it after hydration so the page stays static.
+  useEffect(() => {
+    const location = new URLSearchParams(window.location.search).get('location')
+    if (location && locationRef.current && !locationRef.current.value) {
+      locationRef.current.value = location.slice(0, 200)
+    }
+  }, [])
 
   if (state.status === 'success') {
     return (
@@ -97,7 +106,7 @@ export function QuoteForm() {
         </div>
         <div className={styles.field}>
           <label htmlFor="location">Venue or city</label>
-          <input {...fieldProps('location')} autoComplete="off" type="text" />
+          <input {...fieldProps('location')} autoComplete="off" ref={locationRef} type="text" />
           {fieldError('location')}
         </div>
       </div>

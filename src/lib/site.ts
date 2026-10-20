@@ -5,6 +5,10 @@ export const SITE_URL = (
 
 export const absoluteUrl = (path = '/') => `${SITE_URL}${path === '/' ? '' : path}`
 
+// Link to the quote form, optionally with the "Venue or city" field filled in.
+export const quoteHref = (location?: string) =>
+  location ? `/contact?location=${encodeURIComponent(location)}` : '/contact'
+
 export const navLinks = [
   { href: '/services', label: 'Services' },
   { href: '/menu', label: 'Menu' },
@@ -57,8 +61,8 @@ export const siteInfo: SiteInfo = {
   name: "Coco's Couture Candy Co.",
   tagline: 'Candy & Dessert Catering',
   description:
-    'Candy buffets, dessert tables and custom sweets for weddings and events in Chapel Hill, Durham and across the Triangle, NC. Request a free catering quote.',
-  serviceArea: 'Chapel Hill, Durham and the Triangle',
+    'Candy buffets, dessert tables and custom sweets for weddings and events in Chapel Hill, Durham and the Triangle, NC, plus Cleveland and Columbus, OH. Free quotes.',
+  serviceArea: 'Chapel Hill, Durham and the Triangle, plus Cleveland and Columbus, Ohio',
   phone: '(352) 973-7753',
   email: 'cocoscouturecandyco@gmail.com',
   hours: [],

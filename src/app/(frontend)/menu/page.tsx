@@ -26,7 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return pageMetadata(site, {
     title: 'Catering Menu',
-    description: `Browse the ${site.name} catering menu: charcuterie and grazing, candy bar classics, chocolates and truffles, baked sweets and seasonal specials for events in ${HOME_BASE.city} and the Triangle.`,
+    description: `Our catering menu: charcuterie and grazing, candy bar classics, chocolates and truffles, baked sweets and seasonal specials for events in ${HOME_BASE.city} and beyond.`,
     path: '/menu',
   })
 }

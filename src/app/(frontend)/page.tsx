@@ -10,11 +10,12 @@ import {
   CtaBand,
   FaqList,
   Gallery,
+  HowItWorks,
   Marquee,
   SectionHeading,
   ServiceGrid,
 } from '@/components/sections'
-import { serviceAreas, serviceCounties } from '@/lib/areas'
+import { activeRegions, joinList, regions, serviceAreas, serviceCounties } from '@/lib/areas'
 import { getFaqs, getServices, getSiteInfo, getTestimonials } from '@/lib/content'
 import { galleryPhotos, photos } from '@/lib/photos'
 import { faqJsonLd, pageMetadata } from '@/lib/seo'
@@ -34,21 +35,6 @@ export async function generateMetadata(): Promise<Metadata> {
     absoluteTitle: true,
   })
 }
-
-const steps = [
-  {
-    title: 'Tell us about your event',
-    text: 'Share your date, venue, guest count and the look you are going for.',
-  },
-  {
-    title: 'Get a tailored quote',
-    text: 'We suggest sweets and styling to fit your event and budget, and send an itemized quote.',
-  },
-  {
-    title: 'We set up, you celebrate',
-    text: 'On the day we deliver, style the table and take it all down afterwards.',
-  },
-]
 
 const heroPoints = ['Styled to your colors', 'Delivery, setup and teardown', 'Free itemized quotes']
 
@@ -148,14 +134,7 @@ export default async function HomePage() {
       <section className={ui.section}>
         <div className={ui.container}>
           <SectionHeading eyebrow="Simple from start to finish" title="How it works" />
-          <ol className={styles.steps}>
-            {steps.map((step) => (
-              <li key={step.title}>
-                <h3>{step.title}</h3>
-                <p>{step.text}</p>
-              </li>
-            ))}
-          </ol>
+          <HowItWorks />
         </div>
       </section>
 
@@ -186,13 +165,18 @@ export default async function HomePage() {
         <div className={ui.container}>
           <SectionHeading
             eyebrow="Where we cater"
-            text={`Based in ${HOME_BASE.city}, ${HOME_BASE.regionName}, we deliver and set up across ${serviceCounties
-              .map((county) => county.replace(' County', ''))
-              .join(', ')
-              .replace(/, ([^,]*)$/, ' and $1')} counties.`}
-            title={`Serving ${HOME_BASE.city} and the Triangle`}
+            text={`Based in ${HOME_BASE.city}, ${HOME_BASE.regionName}, we deliver and set up across ${joinList(
+              serviceCounties
+                .filter((county) => county.region === HOME_BASE.region)
+                .map((county) => county.name.replace(' County', '')),
+            )} counties, and take bookings in ${joinList(
+              activeRegions
+                .filter((region) => region !== HOME_BASE.region)
+                .map((region) => regions[region].short),
+            )}.`}
+            title={`Serving ${HOME_BASE.city}, the Triangle and beyond`}
           />
-          <AreaLinks areas={serviceAreas} />
+          <AreaLinks areas={serviceAreas} showRegion />
         </div>
       </section>
 

@@ -2,12 +2,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-import type { ServiceArea } from '@/lib/areas'
+import { areaPlace, type ServiceArea } from '@/lib/areas'
 import { getSiteInfo } from '@/lib/content'
 import { cx } from '@/lib/cx'
 import type { FaqContent, ServiceContent } from '@/lib/data'
 import type { Photo } from '@/lib/photos'
-import { phoneHref } from '@/lib/site'
+import { phoneHref, quoteHref } from '@/lib/site'
 import ui from '@/styles/ui.module.scss'
 
 import styles from './sections.module.scss'
@@ -16,11 +16,14 @@ export function PageHeader({
   eyebrow,
   title,
   intro,
+  actions,
   children,
 }: {
   eyebrow?: string
   title: string
   intro?: string
+  // Calls to action shown under the intro.
+  actions?: React.ReactNode
   children?: React.ReactNode
 }) {
   return (
@@ -30,6 +33,7 @@ export function PageHeader({
         {eyebrow && <p className={ui.eyebrow}>{eyebrow}</p>}
         <h1>{title}</h1>
         {intro && <p className={ui.lead}>{intro}</p>}
+        {actions && <div className={ui.buttonRow}>{actions}</div>}
       </div>
     </section>
   )
@@ -143,15 +147,56 @@ export function Marquee({ items }: { items: string[] }) {
   )
 }
 
-export function AreaLinks({ areas }: { areas: ServiceArea[] }) {
+export function AreaLinks({
+  areas,
+  showRegion = false,
+}: {
+  areas: ServiceArea[]
+  // Label each link "Durham, NC" rather than "Durham", for lists that span more than one state.
+  showRegion?: boolean
+}) {
   return (
     <ul className={ui.linkList}>
       {areas.map((area) => (
         <li key={area.slug}>
-          <Link href={`/service-areas/${area.slug}`}>{area.name}</Link>
+          <Link href={`/service-areas/${area.slug}`}>
+            {showRegion ? areaPlace(area) : area.name}
+          </Link>
         </li>
       ))}
     </ul>
+  )
+}
+
+const defaultSteps = [
+  {
+    title: 'Tell us about your event',
+    text: 'Share your date, venue, guest count and the look you are going for.',
+  },
+  {
+    title: 'Get a tailored quote',
+    text: 'We suggest sweets and styling to fit your event and budget, and send an itemized quote.',
+  },
+  {
+    title: 'We set up, you celebrate',
+    text: 'On the day we deliver, style the table and take it all down afterwards.',
+  },
+]
+
+export function HowItWorks({
+  steps = defaultSteps,
+}: {
+  steps?: { title: string; text: string }[]
+}) {
+  return (
+    <ol className={styles.steps}>
+      {steps.map((step) => (
+        <li key={step.title}>
+          <h3>{step.title}</h3>
+          <p>{step.text}</p>
+        </li>
+      ))}
+    </ol>
   )
 }
 
@@ -171,9 +216,11 @@ export function FaqList({ faqs }: { faqs: FaqContent[] }) {
 export async function CtaBand({
   title = 'Planning an event?',
   text = 'Tell us the date, the guest count and what you have in mind. We will reply with a tailored quote.',
+  href = quoteHref(),
 }: {
   title?: string
   text?: string
+  href?: string
 }) {
   const { phone } = await getSiteInfo()
 
@@ -182,7 +229,7 @@ export async function CtaBand({
       <div className={ui.container}>
         <h2>{title}</h2>
         <p>{text}</p>
-        <Link className={cx(ui.button, ui.buttonLight)} href="/contact">
+        <Link className={cx(ui.button, ui.buttonLight)} href={href}>
           Request a free quote
         </Link>
         {phone && (

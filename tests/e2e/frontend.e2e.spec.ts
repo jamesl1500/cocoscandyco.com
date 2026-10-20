@@ -10,6 +10,9 @@ const pages = [
   '/menu',
   '/service-areas',
   '/service-areas/chapel-hill-nc',
+  '/service-areas/cleveland-oh',
+  '/service-areas/westlake-oh',
+  '/service-areas/columbus-oh',
   '/about',
   '/contact',
 ]
@@ -98,12 +101,14 @@ test.describe('Frontend', () => {
     const areas = business.areaServed.map((area: { name: string }) => area.name)
     expect(areas).toContain('Durham, NC')
     expect(areas).toContain('Orange County, North Carolina')
+    expect(areas).toContain('Cleveland, OH')
+    expect(areas).toContain('Cuyahoga County, Ohio')
   })
 
   test('links to a page for each service area', async ({ page }) => {
     await page.goto(`${base}/service-areas`)
 
-    await expect(page.locator('main h2 a[href^="/service-areas/"]')).toHaveCount(8)
+    await expect(page.locator('main h3 a[href^="/service-areas/"]')).toHaveCount(11)
 
     await page.getByRole('link', { name: 'Durham, NC' }).first().click()
 
@@ -113,6 +118,29 @@ test.describe('Frontend', () => {
 
     const service = (await jsonLd(page)).find((data) => data['@type'] === 'Service')
     expect(service.areaServed.name).toBe('Durham, NC')
+  })
+
+  test('builds a quote funnel on each Ohio area page', async ({ page }) => {
+    for (const [slug, place, county] of [
+      ['cleveland-oh', 'Cleveland, OH', 'Cuyahoga County, Ohio'],
+      ['westlake-oh', 'Westlake, OH', 'Cuyahoga County, Ohio'],
+      ['columbus-oh', 'Columbus, OH', 'Franklin County, Ohio'],
+    ]) {
+      await page.goto(`${base}/service-areas/${slug}`)
+
+      await expect(page.locator('h1')).toHaveText(`Candy buffets and dessert tables in ${place}`)
+
+      const data = await jsonLd(page)
+      const service = data.find((item) => item['@type'] === 'Service')
+      expect(service.areaServed.name).toBe(place)
+      expect(service.areaServed.containedInPlace.name).toBe(county)
+      expect(data.some((item) => item['@type'] === 'FAQPage')).toBe(true)
+    }
+
+    await page.getByRole('link', { name: 'Get a free quote in Columbus' }).click()
+
+    await expect(page).toHaveURL(`${base}/contact?location=Columbus%2C%20OH`)
+    await expect(page.getByLabel('Venue or city')).toHaveValue('Columbus, OH')
   })
 
   test('returns 404 for an unknown service area', async ({ page }) => {
@@ -125,6 +153,7 @@ test.describe('Frontend', () => {
     const sitemap = await (await request.get(`${base}/sitemap.xml`)).text()
 
     expect(sitemap).toContain('/service-areas/chapel-hill-nc</loc>')
+    expect(sitemap).toContain('/service-areas/westlake-oh</loc>')
     expect(sitemap).toContain('/services/candy-buffets</loc>')
 
     const robots = await (await request.get(`${base}/robots.txt`)).text()

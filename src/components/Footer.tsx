@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
 
-import { serviceAreas } from '@/lib/areas'
+import { areaPlace, serviceAreas } from '@/lib/areas'
 import type { ServiceContent } from '@/lib/data'
 import { navLinks, phoneHref, socialLabel, type SiteInfo } from '@/lib/site'
 import { cx } from '@/lib/cx'
@@ -37,7 +37,7 @@ export function Footer({ site, services }: { site: SiteInfo; services: ServiceCo
           <ul>
             {serviceAreas.map((area) => (
               <li key={area.slug}>
-                <Link href={`/service-areas/${area.slug}`}>{area.name}, NC</Link>
+                <Link href={`/service-areas/${area.slug}`}>{areaPlace(area)}</Link>
               </li>
             ))}
           </ul>
